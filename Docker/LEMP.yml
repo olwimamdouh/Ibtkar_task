@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+    nginx:
+        image: nginx:stable-alpine
+        ports:
+            - "8080:80"
+        volumes:
+            - ./default.conf:/etc/nginx/conf.d/default.conf
+        depends_on:
+            - php
+        networks:
+            - LEMP
+
+    mariadb:
+        image: mariadb:latest
+        volumes:
+            - mariadb:/var/lib/mysql
+        ports:
+            - "3306:3306"
+        depends_on:
+            - nginx
+        environment:
+	    - MYSQL_USER: 'test'
+            - MYSQL_ROOT_PASSWORD: 'test'
+	    - MYSQL_DATABASE: 'testdb'
+           
+        networks:
+            - LEMP    
+
+    php:
+        image: php:7-fpm-alpine
+        volumes:
+            - ./DocumentRoot:/var/www/html
+        ports:
+            - "9000:9000"       
+        networks:
+            - LEMP
+        links:
+            - 'mariadb'
+
+networks:
+ LEMP:
+volumes:
+ mariadb:

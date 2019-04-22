@@ -1,0 +1,7 @@
+#firewall-cmd --permanent --zone=public --add-rich-rule='
+  rule family="ipv4"
+  source address="xx.xx.xx.xx/xx"
+  port protocol="tcp" port="xx" accept'
+
+#firewall-cmd --reload
+
